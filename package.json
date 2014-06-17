@@ -4,6 +4,9 @@
   "version": "0.0.1",
   "dependencies": {
     "express": "4.x",
+    "body-parser":"latest",
+    "corser": "latest",
+    "diskspace": "latest",
     "pg": "latest"
   }
 }
