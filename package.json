@@ -1,0 +1,9 @@
+{
+  "name": "GISAPI_Workshop_06192014",
+  "description": "Minimal GIS Services API",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "4.x",
+    "pg": "latest"
+  }
+}
