@@ -19,7 +19,7 @@ This little workshop will get you off the ground and running.  After this, you w
 
 ###Linux - follow the instructions here:  https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 
-##Windows - Good luck - it looks like you need visual studio installed.  I have tried to install visual studio express 2014 AND .net sdk 2.0 without any luck.  Trying Visual Studio Express 2012:  http://www.microsoft.com/en-us/download/confirmation.aspx?id=34673  You will also need an SSH client (i suggest putty)
+##Windows - Good luck - it looks like you need visual studio installed.  I have tried to install visual studio express 2014 AND .net sdk 2.0 without any luck.  Trying : http://www.microsoft.com/en-us/download/details.aspx?id=29  You will also need an SSH client (i suggest putty)
 
 
 //Open Data Used:
