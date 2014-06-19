@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>Example2</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Leaflet Default Style -->
+    <link rel="stylesheet" href="http://leafletjs.com/dist/leaflet.css" />
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/example-style.css" rel="stylesheet">
+    <link href="assets/css/slider.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="assets/js/bootstrap-slider.js"></script>
+	<script src="http://leafletjs.com/dist/leaflet.js"></script>
+    <!-- Begin page content -->
+    <div class="container">
+
+    	<div class="page-header">
+        	<h1>Baltimore Homicides (Filter on Date & Weapon)</h1>
+    	</div>
+      	<div class="row">
+      		<div class="col-lg-7 col-md-7">
+				<div id="map"></div>
+			</div>
+
+			<div class="col-lg-5 col-md-5">
+				<h3><div id="numFeats">Number of Features: 0</div></h3>
+				<h3><div id="respTime">Response Time: 0</div></h3>
+				<h3><div id="northEast">North East x/y</div></h3>
+				<h3><div id="southWest">South West x/y</div></h3>
+				<div class="row">
+					<div class="well">
+						<div id='dynamicSlider'>
+							<!-- slider dynamically goes here -->
+          			</div>
+          		</div>
+          		<div class="row">
+			        <div class="col-md-4">
+			        	Weapon
+		    	    	<select class="form-control" id="selectWeapon">
+							<option>All</option>
+							<option>Knife</option>
+							<option>Firearm</option>
+							<option>Other</option>
+			        	</select>
+			    	</div>
+			    </div>
+			</div>
+	    </div>
+	    <div id="footer">
+	      <div class="container">
+	        <p class="text-muted">GeoMore June 19, 2014 | <a target="_blank" href="http://madewithloveinbaltimore.org">Made with &hearts; in Baltimore</a> | <a href="../">Home</a></p>
+	      </div>
+	    </div>
+	</div>
+		<script>
+			var getBaseURL = location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/";
+			var prettyStartDate, prettyEndDate;
+			var weaponUsed = 'ALL';
+
+			//This request builds the slider based on date ranges in the homicide table
+			$.getJSON(getBaseURL + "api/homicideDateRange", function(data){
+				var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+				prettyStartDate = String(new Date(data.start_date).getFullYear()) + '-' + 
+									String(new Date(data.start_date).getMonth()) + '-' + 
+									String(new Date(data.start_date).getDate());
+				prettyEndDate = String(new Date(data.end_date).getFullYear()) + '-' + 
+								String(new Date(data.end_date).getMonth()) + '-' + 
+								String(new Date(data.end_date).getDate());
+				var firstDate = new Date(data.start_date);
+				var secondDate = new Date(data.end_date);
+
+				var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+				$('#dynamicSlider').html('<span>' + prettyStartDate + ' &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="date_slider" class="span2" value="" data-slider-min="0" data-slider-handle="square" data-slider-max="' + String(Number(diffDays) + 1) + '" data-slider-step="1" data-slider-value="[0,' + String(Number(diffDays) + 1) + ']" data-slider-orientation="horizontal" data-slider-selection="after"data-slider-tooltip="show"> &nbsp;&nbsp;&nbsp;&nbsp; ' + prettyEndDate + '</span>')
+				$('#date_slider').slider({
+					formater: function(value) {
+						return  new Date(((Number(value)*oneDay) + Number(firstDate.getTime()))).getMonth() + '-' +
+								new Date(((Number(value)*oneDay) + Number(firstDate.getTime()))).getDate() + '-' +
+								new Date(((Number(value)*oneDay) + Number(firstDate.getTime()))).getFullYear()
+					}
+				}).on('slideStop', function(ev){
+					//sets global variables to be slider values to be passed in to the query
+    				prettyStartDate = new Date(((Number(ev.value[0])*oneDay) + Number(firstDate.getTime()))).getFullYear() + '-' +
+    							new Date(((Number(ev.value[0])*oneDay) + Number(firstDate.getTime()))).getMonth() + '-' +
+								new Date(((Number(ev.value[0])*oneDay) + Number(firstDate.getTime()))).getDate();
+
+    				prettyEndDate = new Date(((Number(ev.value[1])*oneDay) + Number(firstDate.getTime()))).getFullYear() + '-' + 
+    							new Date(((Number(ev.value[1])*oneDay) + Number(firstDate.getTime()))).getMonth() + '-' +
+								new Date(((Number(ev.value[1])*oneDay) + Number(firstDate.getTime()))).getDate()
+					
+					homicideLayer()	
+  				});
+  				//  After response comes back, set map zoom to trigger loading of layers/next ajax request
+  				map.setView(new L.LatLng(39.2833, -76.6167), 13).addLayer(baseMap);
+
+			})
+
+			//On changes to weapon dropdown, set filter variable and run request again
+			$('#selectWeapon').change(function(){
+				weaponUsed = $(this).val().toUpperCase();
+				homicideLayer();
+			})
+			
+			
+			// mapping section
+			var map = L.map('map');
+			
+			var baseMap = L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+				maxZoom: 18,
+				attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+					'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+					'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+				id: 'examples.map-20v6611k'
+			}).addTo(map);
+
+			var geojsonMarkerOptions = {
+			    radius: 8,
+			    fillColor: "#FFA500",
+			    color: "#FFFFFF",
+			    weight: 2,
+			    opacity: 1,
+			    fillOpacity: 0.8
+			};
+
+			map.on('moveend', function(){
+				homicideLayer()
+			})
+
+			
+
+			function homicideLayer(){
+				var sendDate = (new Date()).getTime();
+				try{
+					map.removeLayer(testL);
+				}
+				catch(err){
+					//nothing
+				}
+				//console.log(map.getBounds()._northEast.lng)
+				$.getJSON(getBaseURL + "api/filter", {
+	    				neY: map.getBounds()._northEast.lat,
+	    				neX: map.getBounds()._northEast.lng,
+	    				swY: map.getBounds()._southWest.lat,
+	    				swX: map.getBounds()._southWest.lng,
+	    				startDate: prettyStartDate,
+	    				endDate: prettyEndDate,
+	    				weapon: weaponUsed
+	  				}, function(data){
+	  					var receiveDate = (new Date()).getTime();
+
+	  					//populate the statistics next about map features
+	  					$('#numFeats').html('Number of Features: ' + data.features.length)
+	  					$('#respTime').html('Response Time: ' + (receiveDate - sendDate) + 'ms')
+	  					$('#northEast').html('North East: ' + String(map.getBounds()._northEast.lat).substring(0, 6) + ' / ' + String(map.getBounds()._northEast.lng).substring(0, 7))
+	  					$('#southWest').html('South West: ' + String(map.getBounds()._southWest.lat).substring(0, 6) + ' / ' + String(map.getBounds()._southWest.lng).substring(0, 7))
+						testL = L.geoJson(data, {
+						    pointToLayer: function (feature, latlng) {
+						    	return L.circleMarker(latlng, geojsonMarkerOptions);
+			    			},
+						    onEachFeature: function (feature, layer) {
+						        layer.bindPopup('<small>' + feature.properties.desc + '</small></br><small>' + feature.properties.date + '</small></br><small>' + feature.properties.crimetime + '</small></br><small>' + feature.properties.weapon + '</small>');
+						    }
+						}).addTo(map);
+						//update feature stats
+
+					});
+			}
+
+
+		</script>
+
+</body>
+</html>

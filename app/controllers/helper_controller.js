@@ -1,4 +1,8 @@
 'use strict';
+
+var pg = require('pg');
+var connstring = 'postgres://chogan:Salisbury2Crabs@localhost:5432/test_postgis'
+
 /**
  * A module that defines the response format.
  * @module app_schema_controller
@@ -29,4 +33,37 @@ exports.showStorageAvailable = function(req, res) {
 	    	status:status
 	    })
 	});
+}
+
+exports.homicideDateRange = function(req, res){
+	pg.connect(connstring, function(err, client, done) {
+            var handleError = function(err) {
+                if(!err) return false;
+                done(client);
+                next(err);
+                return true;
+
+            };
+
+            var myQuery = "SELECT  min(crimedate) as start_date, max(crimedate) as end_date FROM homicides;"
+
+            // console.log(myQuery)
+
+            client.query(myQuery, function(err, result) {
+                // console.log(result.rowCount)
+                console.log(result)
+                if(result.rowCount == 0) {
+                  res.send(500);
+                } 
+                else {
+                	res.type('text/javascript');
+                  	res.jsonp({
+                  		start_date: result.rows[0].start_date,
+                  		end_date: result.rows[0].end_date
+                  	});
+                  
+                  done();
+                }
+            });
+        })
 }
