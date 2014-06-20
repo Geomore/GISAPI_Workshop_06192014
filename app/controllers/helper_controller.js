@@ -1,7 +1,7 @@
 'use strict';
 
 var pg = require('pg');
-var connstring = 'postgres://chogan:Salisbury2Crabs@localhost:5432/test_postgis'
+var connstring = 'postgres://postgres:password1@107:170:76:18:5432/postgis_template'
 
 /**
  * A module that defines the response format.

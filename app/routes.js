@@ -13,4 +13,5 @@ module.exports = function (app) {
     app.get("/api/boundingBox", geoController.boundingBox);
     app.get("/api/intersects", geoController.intersects);
     app.get("/api/filter", geoController.filters);
+    app.get("/api/buffer", geoController.buffer);
 };
