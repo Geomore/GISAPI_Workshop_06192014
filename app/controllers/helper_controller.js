@@ -37,7 +37,9 @@ exports.showStorageAvailable = function(req, res) {
 
 exports.homicideDateRange = function(req, res){
 	pg.connect(connstring, function(err, client, done) {
+		console.log(err)
             var handleError = function(err) {
+            	console.log(err)
                 if(!err) return false;
                 done(client);
                 next(err);
