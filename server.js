@@ -9,7 +9,7 @@ require('./config/express_config')(app);
 require("./app/routes")(app);
 
 // Telling the port to be 3000 IF there is not a port assigned in config/config.js
-var port = 3000;
+var port = 80;
 app.listen(port);
 console.log('listening on port ' + port)
 
