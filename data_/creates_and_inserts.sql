@@ -23,9 +23,9 @@ Now copy the data from the csv in to your table, here is mine, adjust the copy s
 COPY homicides FROM '/Users/chogan/Sites/GISAPI_Workshop_06192014/data_/fromOpenBalt/Homicides.csv' DELIMITER ',' CSV HEADER
 
 /* Now add a geography field */
-ALTER TABLE homicides ADD COLUMN geog geography(POINT, 4326);
+ALTER TABLE homicides ADD COLUMN geom geometry(POINT, 4326);
 
 /* And update the column */
-UPDATE homicides SET geog = ST_GeographyFromText('SRID=4326;POINT('
+UPDATE homicides SET geom = ST_GeometryFromText('SRID=4326;POINT('
 	|| (string_to_array(regexp_replace(coords, '[()]', '','g'), ', '))[2] || ' '
 	|| (string_to_array(regexp_replace(coords, '[()]', '','g'), ', '))[1] || ')');
