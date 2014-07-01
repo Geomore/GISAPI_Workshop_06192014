@@ -1,0 +1,2 @@
+# ArtMap
+### a Sails application
