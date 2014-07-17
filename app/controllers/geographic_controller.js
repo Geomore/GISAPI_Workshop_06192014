@@ -7,7 +7,7 @@ homicides CSV:  https://data.baltimorecity.gov/Public-Safety/Homicides/9h5s-7d88
 
 
 var pg = require('pg');
-var connstring = "postgres://postgres:password1@localhost:5432/postgisfun";
+var connstring = "postgres://postgres:password1@127.0.0.1:5432/postgisfun";
 console.log(connstring)
 /* 
 this makes geojson output possible
