@@ -40,7 +40,7 @@ exports.boundingBox = function(req, res, next) {
                 return true;
 
             };
-            var myQuery = "SELECT *, ST_AsGeoJSON(geog) AS geography FROM homicides WHERE ST_CoveredBy(geog, ST_GeometryFromText ('POLYGON((" + swX + " " + swY + "," + neX + " " + swY + "," + neX + " " + neY + "," + swX + " " + neY + ","+ swX + " " + swY + "))', 4326 ));"
+            var myQuery = "SELECT *, ST_AsGeoJSON(geom) AS geography FROM homicides WHERE ST_CoveredBy(geom, ST_GeometryFromText ('POLYGON((" + swX + " " + swY + "," + neX + " " + swY + "," + neX + " " + neY + "," + swX + " " + neY + ","+ swX + " " + swY + "))', 4326 ));"
             console.log(myQuery)
 
             client.query(myQuery, function(err, result) {
