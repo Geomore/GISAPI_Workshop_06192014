@@ -216,7 +216,7 @@ exports.buffer = function(req, res, next) {
                 var myQuery = "SELECT ST_AsGeoJSON(st_union(ST_Transform(ST_Buffer(ST_Transform(geom,26985),"+bufferDistance+"),4326))) AS geography FROM homicides WHERE ST_CoveredBy(geog, ST_GeometryFromText ('POLYGON((" + swX + " " + swY + "," + neX + " " + swY + "," + neX + " " + neY + "," + swX + " " + neY + ","+ swX + " " + swY + "))', 4326 )) AND (crimedate >= to_date('" + startDate + "','YYYY-MM-DD') AND (crimedate <= to_date('" + endDate + "', 'YYY-MM-DD')))"
             }
             else{
-                var myQuery = "SELECT *, ST_AsGeoJSON(geom) AS geography FROM homicides WHERE ST_CoveredBy(geog, ST_GeometryFromText ('POLYGON((" + swX + " " + swY + "," + neX + " " + swY + "," + neX + " " + neY + "," + swX + " " + neY + ","+ swX + " " + swY + "))', 4326 )) AND (crimedate >= to_date('" + startDate + "','YYYY-MM-DD') AND (crimedate <= to_date('" + endDate + "', 'YYY-MM-DD')))"
+                var myQuery = "SELECT *, ST_AsGeoJSON(geom) AS geography FROM homicides WHERE ST_CoveredBy(geom, ST_GeometryFromText ('POLYGON((" + swX + " " + swY + "," + neX + " " + swY + "," + neX + " " + neY + "," + swX + " " + neY + ","+ swX + " " + swY + "))', 4326 )) AND (crimedate >= to_date('" + startDate + "','YYYY-MM-DD') AND (crimedate <= to_date('" + endDate + "', 'YYY-MM-DD')))"
             }
             if((weapon != 'ALL') && (weapon)){
                 myQuery = myQuery + " AND weapon = '" + weapon + "'"
