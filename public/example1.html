@@ -73,7 +73,10 @@
 	    </div>
 	<!-- </div> -->
 		<script>
-			var map = L.map('map');
+			var map = L.map('map',{
+				minZoom: 11,
+				maxBounds: L.latLngBounds([39.181, -76.791], [39.446, -76.448])
+			});
 			var getBaseURL = location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/";
 			
 			var baseMap = L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
