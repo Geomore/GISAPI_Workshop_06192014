@@ -1,5 +1,4 @@
-GISAPI_Workshop_06192014
-========================
+[ ![Codeship Status for Geomore/GISAPI_Workshop_06192014](https://www.codeship.io/projects/2115e9f0-f072-0131-1924-5699c2e7bb50/status)](https://www.codeship.io/projects/27397)
 
 Nodejs, Postgres with PostGIS geojson api workshop
 
