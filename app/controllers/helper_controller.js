@@ -1,7 +1,10 @@
 'use strict';
 
+var env = require('../../config/env.js'),
+    environment = new env(),
+    connstring = environment.connstring;
+    
 var pg = require('pg');
-var connstring = "postgres://postgres:password1@127.0.0.1:5432/postgisfun";
 
 /**
  * A module that defines the response format.

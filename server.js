@@ -2,6 +2,9 @@ var express = require('express'),
 	pg = require('pg'),
 	app = express();
 
+var env = require('./config/env.js'),
+	environment = new env();
+
 //load expressjs configs/headers/defaults.  for more info, check expressjs.com, pass in app and overall config
 require('./config/express_config')(app);
 
@@ -9,9 +12,9 @@ require('./config/express_config')(app);
 require("./app/routes")(app);
 
 // Telling the port to be 3000 IF there is not a port assigned in config/config.js
-var port = 8080;
-app.listen(port);
-console.log('listening on port ' + port)
+//var port = 8080;
+app.listen(environment.port);
+console.log('listening on port ' + environment.port)
 
 
 
