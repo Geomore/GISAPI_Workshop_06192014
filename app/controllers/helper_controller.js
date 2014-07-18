@@ -2,7 +2,7 @@
 
 var pg = require('pg');
 var connstring = "postgres://postgres:password1@127.0.0.1:5432/postgisfun";
-console.log(connstring)
+
 /**
  * A module that defines the response format.
  * @module app_schema_controller

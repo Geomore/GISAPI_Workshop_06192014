@@ -14,4 +14,5 @@ module.exports = function (app) {
     app.get("/api/intersects", geoController.intersects);
     app.get("/api/filter", geoController.filters);
     app.get("/api/buffer", geoController.buffer);
+    app.get("/api/nearClick", geoController.nearClick);
 };

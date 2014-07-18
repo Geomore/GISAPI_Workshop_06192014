@@ -51,12 +51,27 @@
 				<h3><div id="southWest">South West x/y</div></h3>
 			</div>
 	    </div>
+	  </div>
+
+      <!-- sql block start -->
+      </br></br>
+      <div class="container">
+      <div class="row">
+      		<div class="col-lg-12 col-md-12">
+      			<h2>Query</h2>
+				<div id="querySection"></div>
+			</div>
+	</div>
+	</div>
+	</br></br>
+      <!-- sql block end -->
+      <!-- <div class="container"> -->
 	    <div id="footer">
 	      <div class="container">
 	        <p class="text-muted">GeoMore June 19, 2014 | <a target="_blank" href="http://madewithloveinbaltimore.org">Made with &hearts; in Baltimore</a> | <a href="../">Home</a></p>
 	      </div>
 	    </div>
-	</div>
+	<!-- </div> -->
 		<script>
 			var map = L.map('map');
 			var getBaseURL = location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "/";
@@ -99,6 +114,12 @@
 	    				swY: map.getBounds()._southWest.lat,
 	    				swX: map.getBounds()._southWest.lng
 	  				}, function(data){
+	  					var inData = '';
+	  					for(var i in data.metadata[0]){
+	  						inData = inData + data.metadata[0][i] + "<br>"
+	  					}
+
+	  					$('#querySection').html(inData)
 	  					var receiveDate = (new Date()).getTime();
 
 	  					//populate the statistics next about map features
