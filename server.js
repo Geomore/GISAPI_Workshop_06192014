@@ -11,8 +11,6 @@ require('./config/express_config')(app);
 //loading up my routes and passing the app instance to it
 require("./app/routes")(app);
 
-// Telling the port to be 3000 IF there is not a port assigned in config/config.js
-//var port = 8080;
 app.listen(environment.port);
 console.log('listening on port ' + environment.port)
 
