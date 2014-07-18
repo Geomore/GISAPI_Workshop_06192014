@@ -23,3 +23,11 @@ This little workshop will get you off the ground and running.  After this, you w
 
 //Open Data Used:
 Neighborhoods - https://data.baltimorecity.gov/Neighborhoods/Neighborhoods-Shape/ysi8-7icr
+
+#todo
+templating for front end
+overall cleanup
+make sql updates responsive
+appearance updates
+more queries
+add a better landing page with install/config instructions, data instructions, contact, etc
